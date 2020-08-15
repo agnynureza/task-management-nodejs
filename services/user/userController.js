@@ -2,6 +2,7 @@ const dbQuery = require('../../db/dev/dbQuery')
 const {errorMessage, successMessage, status} = require('../../helpers/status')
 const {comparePassword, generateUserToken, isEmpty} = require('../../helpers/validation')
 const User = require('./userClass')
+const UserModel = require('./userModel')
 
 /**
  * Create A User
@@ -27,25 +28,23 @@ const signUpUser = async (req, res) => {
     //set hashed password
     user.hashedpassword();
 
-    //insert to database 
-    let dbResponse = user.insertUserDB();
-    if(dbResponse.error){
-        if (dbResponse.routine === '_bt_check_unique') {
+    try{
+        let dbResponse = await UserModel.insertUserDB(user._username, user._hashedPassword);
+        delete dbResponse.password;
+        let token = generateUserToken(dbResponse.id, dbResponse.username);
+
+        successMessage.data = dbResponse;
+        successMessage.data.token = token;
+        return res.status(status.created).send(successMessage);
+    }catch(error){
+        if (error.routine === '_bt_check_unique') {
             errorMessage.error = 'User with that username already exist';
             return res.status(status.conflict).send(errorMessage);
         }
         errorMessage.error = 'Operation was not successful';
         return res.status(status.error).send(errorMessage);
     }
-
-    delete dbResponse.password;
-    let token = generateUserToken(dbResponse.id, dbResponse.username);
-
-    successMessage.data = dbResponse;
-    successMessage.data.token = token;
-    return res.status(status.created).send(successMessage);
-};
-
+}
 /**
  * Signin
  * @param {object} req

@@ -1,5 +1,4 @@
 const {isEmpty, validatePassword, hashPassword} = require('../../helpers/validation')
-const userModel = require('./userModel')
 
 class User {
     constructor(username, password){
@@ -20,11 +19,6 @@ class User {
 
     hashedpassword(){
         this._hashedPassword = hashPassword(this._password)
-    }
-
-    insertUserDB(){
-        let dbResponse = userModel.insertUser(this._username, this._hashedPassword)
-        return dbResponse 
     }
 }
 
