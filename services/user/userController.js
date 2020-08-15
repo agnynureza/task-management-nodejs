@@ -1,8 +1,7 @@
-const moment = require('moment')
 const dbQuery = require('../../db/dev/dbQuery')
 const {errorMessage, successMessage, status} = require('../../helpers/status')
-const {hashPassword,comparePassword, generateUserToken, 
-    isValidEmail, validatePassword, isEmpty} = require('../../helpers/validation')
+const {comparePassword, generateUserToken, isEmpty} = require('../../helpers/validation')
+const User = require('./userClass')
 
 /**
  * Create A User
@@ -11,43 +10,40 @@ const {hashPassword,comparePassword, generateUserToken,
  * @returns {object} reflection object
  */
 
-const signUp = async (req, res) => {
+const signUpUser = async (req, res) => {
     let { username, password} = req.body;
+    let user = new User(username, password)
 
-    if (isEmpty(email) || isEmpty(first_name) || isEmpty(last_name) || isEmpty(password)) {
+    if (user.validateEmpty()) {
         errorMessage.error = 'username and password cannot be empty';
         return res.status(status.bad).send(errorMessage);
     }
 
-    if (!validatePassword(password)) {
+    if (!user.validatePassword()) {
         errorMessage.error = 'Password must be more than five(5) characters';
         return res.status(status.bad).send(errorMessage);
     }
 
-    let hashedPassword = hashPassword(password);
-    let createUserQuery = `INSERT INTO users(username, password)
-        VALUES($1, $2)
-        returning *`;
-    let values = [ username, hashedPassword];
+    //set hashed password
+    user.hashedpassword();
 
-    try {
-        let { rows } = await dbQuery.query(createUserQuery, values);
-        let dbResponse = rows[0];
-        delete dbResponse.password;
-        let token = generateUserToken(dbResponse.id, dbResponse.username, dbResponse.is_admin);
-
-        successMessage.data = dbResponse;
-        successMessage.data.token = token;
-
-        return res.status(status.created).send(successMessage);
-    } catch (error) {
-        if (error.routine === '_bt_check_unique') {
-            errorMessage.error = 'User with that EMAIL already exist';
+    //insert to database 
+    let dbResponse = user.insertUserDB();
+    if(dbResponse.error){
+        if (dbResponse.routine === '_bt_check_unique') {
+            errorMessage.error = 'User with that username already exist';
             return res.status(status.conflict).send(errorMessage);
         }
         errorMessage.error = 'Operation was not successful';
         return res.status(status.error).send(errorMessage);
     }
+
+    delete dbResponse.password;
+    let token = generateUserToken(dbResponse.id, dbResponse.username);
+
+    successMessage.data = dbResponse;
+    successMessage.data.token = token;
+    return res.status(status.created).send(successMessage);
 };
 
 /**
@@ -57,7 +53,7 @@ const signUp = async (req, res) => {
  * @returns {object} user object
  */
 
-const signIn = async (req, res) => {
+const signInUser = async (req, res) => {
     let { username, password } = req.body;
 
     if (isEmpty(username) || isEmpty(password)) {
@@ -93,6 +89,6 @@ const signIn = async (req, res) => {
 };
 
 module.exports = {
-  signUp,
-  signIn
+  signInUser,
+  signUpUser
 };

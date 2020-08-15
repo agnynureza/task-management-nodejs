@@ -11,7 +11,7 @@ const status = {
   nocontent: 204,
 };
 
-export {
+module.exports =  {
   successMessage,
   errorMessage,
   status
