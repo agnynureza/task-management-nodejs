@@ -1,4 +1,4 @@
-const pool = require("./pool");
+const pool = require('./pool');
 
 pool.on("connect", ()=>{
     console.log("connected to the db");
@@ -11,7 +11,7 @@ pool.on("connect", ()=>{
 const createUserTable = () => {
     const userCreateQuery = `CREATE TABLE IF NOT EXISTS users
     (id SERIAL PRIMARY KEY,
-    username VARCHAR(100),
+    username VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(100) NOT NULL,
     created_at DATE NOT NULL DEFAULT NOW())`;
 
