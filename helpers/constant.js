@@ -16,6 +16,7 @@ const numbs = '[1-9]|am|pm'
 const days  = '((mon|tues|wed(nes)?|thur(s)?|fri|sat(ur)?|sun)(day)?)'
 const day = 'monday|tuesday|wednesday|thrusday|friday|saturday|sunday'
 const times = 'today|tomorrow|next week|next month'  
+const repeated = ''
 const daysNumb = {
   'sunday' : 7,
   'monday' : 1,

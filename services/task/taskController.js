@@ -10,9 +10,9 @@ const {errorMessage, successMessage, status} = require('../../helpers/constant')
  */
 
 const createTask = async (req, res) => {
-    let{location, description, event, duration, subtask} = req.body
+    let{location, description, event, duration, subtask, repeat} = req.body
     let {id} = req.user 
-    let task = new Task(id, location, description, event, duration, subtask)
+    let task = new Task(id, location, description, event, duration, subtask. repeat)
 
     task.validateLocation()
     task.validateEvent()
@@ -26,6 +26,9 @@ const createTask = async (req, res) => {
     let subTaskPrams = task.paramsSubtask
 
     try{ 
+        let getTask = await TaskModel.getTask(id, task._event)
+        task.validationClashEvent(getTask)
+
         let dbResponse = await TaskModel.insertAll(taskParams, subTaskPrams)
        
         successMessage.data = dbResponse;

@@ -43,14 +43,16 @@ class TaskModel {
     }
 
     static async insertAll(paramstask, subTaskParams){
+        let subtask= [0]
         try{
             await pool.query('BEGIN')
             let respTask = await this.insertTaskDB(paramstask)
 
             if(subTaskParams.length > 0){
                 let respSubTask = await this.insertSubTaskDB(subTaskParams)
-                await this.insertRelationTaskDB(respTask.id, respSubTask)
+                subtask = respSubTask
             }
+            await this.insertRelationTaskDB(respTask.id, subtask)
             await pool.query('COMMIT')
             return `Suceess Insert task id : ${respTask.id} `
         }catch(error){
@@ -75,9 +77,28 @@ class TaskModel {
             let {rows} = await dbQuery.query(queryStatement,values)
             return rows
         }catch(err){
-            console.log(err)
             throw(err)
         } 
+    }
+
+    static async getTask (userid, time){
+        try {
+            let queryStatement = `SELECT t.userid, t.location, t.description as "main task",
+                  t.event as "time event", t.duration, t. status, tr.repeat_type
+                  from task AS t 
+                  join taskdetail AS td ON t.id = td.taskid
+                  left join taskrepeat AS tr ON td.id = tr.taskdetailid
+                WHERE 
+                  userid = $1 
+                    AND 
+                  t.event = $2;`
+
+            let values = [userid, time]
+            let {rows} = await dbQuery.query(queryStatement,values)
+            return rows
+        }catch(err){
+            throw(err)
+        }
     }
     
 }
