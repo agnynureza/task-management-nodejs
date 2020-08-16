@@ -1,5 +1,5 @@
 const {isEmpty} = require('../../helpers/validation') 
-const {locationFilter, timeFilter, eventFilter} = require('../../helpers/constant')
+const {locationFilter, timeFilter, eventFilter, daysNumb} = require('../../helpers/constant')
 
 class Task{
     constructor(userid, location, description, event, duration, subtask){
@@ -57,8 +57,27 @@ class Task{
         let rgx = new RegExp(eventFilter, "gi")
         let description = this._description
         let filter = description.match(rgx)
-
-        this._event = filter[0]
+        let day = filter[0]
+        
+        let date = new Date()
+       console.log(day)
+        switch(day.toLowerCase()){
+            case 'tomorrow':
+                day = new Date(date.setDate(date.getDate() + 1)).toDateString()
+                break
+            case 'next week':
+                day = new Date(date.setDate(date.getDate() + 7)).toDateString()
+                break
+            case 'next month':
+                day = new Date(date.setMonth(date.setMonth() + 1)).toDateString()
+                break
+            default:
+                let today = date.getDay() == 0 ? date.getDay() + 7 : date.getDay()
+                let add = daysNumb[day] - today
+                day = new Date(date.setDate(date.getDate() + add)).toDateString()
+                break
+        }
+        this._event = day
     }
 
     validateDuration(){

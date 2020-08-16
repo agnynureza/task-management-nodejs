@@ -10,11 +10,21 @@ const status = {
   bad: 400,
   nocontent: 204,
 };
+
 const conjuction = 'at|this'
 const numbs = '[1-9]|am|pm' 
 const days  = '((mon|tues|wed(nes)?|thur(s)?|fri|sat(ur)?|sun)(day)?)'
 const day = 'monday|tuesday|wednesday|thrusday|friday|saturday|sunday'
-const times = 'tomorrow|next week|next month'  
+const times = 'today|tomorrow|next week|next month'  
+const daysNumb = {
+  'sunday' : 7,
+  'monday' : 1,
+  'tuesday' : 2,
+  'wednesday': 3,
+  'thursday' : 4,
+  'friday' : 5,
+  'saturday' : 6
+}
 
 const locationFilter = `${conjuction}|${numbs}|${days}|${times}` 
 const timeFilter =`[1-9]?(am)|[1-9]?(pm)`
@@ -26,5 +36,6 @@ module.exports =  {
   status,
   locationFilter,
   timeFilter,
-  eventFilter
+  eventFilter,
+  daysNumb
 };
