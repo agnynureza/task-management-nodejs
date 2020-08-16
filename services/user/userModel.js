@@ -11,6 +11,18 @@ class UsersModel{
             throw(err)
         }
     }
+
+    static async getUserDB(username){
+        try{
+            let queryStatement = 'SELECT * FROM users WHERE username = $1'
+            let values = [username]
+            let {rows} = await dbQuery.query(queryStatement, values)
+            return rows[0]
+        }catch(err){
+            throw(err)
+        }
+    
+    }
 }
 
 module.exports = UsersModel

@@ -54,17 +54,16 @@ const signUpUser = async (req, res) => {
 
 const signInUser = async (req, res) => {
     let { username, password } = req.body;
-
-    if (isEmpty(username) || isEmpty(password)) {
-    errorMessage.error = 'Email or Password detail is missing';
-    return res.status(status.bad).send(errorMessage);
+    let user = new User(username, password)
+    
+    if(user.validateEmpty()){
+        errorMessage.error = 'Email or Password detail is missing';
+        return res.status(status.bad).send(errorMessage);
     }
 
-    let signinUserQuery = 'SELECT * FROM users WHERE username = $1';
     try {
-        let { rows } = await dbQuery.query(signinUserQuery, [email]);
-        let dbResponse = rows[0];
-       
+        let dbResponse = await UserModel.getUserDB(username);
+         
         if (!dbResponse) {
             errorMessage.error = 'User with this username does not exist';
             return res.status(status.notfound).send(errorMessage);
