@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
-const {errorMessage, status} =  require('../helpers/status')
+const {errorMessage, status} =  require('../helpers/constant')
 
 dotenv.config();
 

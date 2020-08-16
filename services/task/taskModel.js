@@ -62,7 +62,7 @@ class TaskModel {
     static async listTask(userid, location, time){
         try{
             let queryStatement =`SELECT t.userid, t.location, t.description as "main task",
-                     t.event as "time event", t.duration, t. status, 
+                      t.event as "time event", t.duration, t. status, 
                       st.description as "sub task", st.duration "sub duration", td.status "sub status"
                       FROM task AS t 
                       JOIN taskdetail AS td ON t.id = td.taskid

@@ -1,6 +1,6 @@
 const Task = require('./taskClass')
 const TaskModel = require('./taskModel')
-const {errorMessage, successMessage, status} = require('../../helpers/status') 
+const {errorMessage, successMessage, status} = require('../../helpers/constant') 
 
 /**
  * Create A Task
@@ -13,6 +13,10 @@ const createTask = async (req, res) => {
     let{location, description, event, duration, subtask} = req.body
     let {id} = req.user 
     let task = new Task(id, location, description, event, duration, subtask)
+
+    task.validateLocation()
+    task.validateEvent()
+    task.validateDuration()
 
     if(task.validateEmpty()){
         errorMessage.error = 'Description or Event are missing';
