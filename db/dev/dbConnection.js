@@ -13,7 +13,8 @@ const createUserTable = () => {
     (id SERIAL PRIMARY KEY,
     username VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(100) NOT NULL,
-    created_at DATE NOT NULL DEFAULT NOW())`;
+    created_at DATE NOT NULL DEFAULT NOW(),
+    updated_at DATE NOT NULL DEFAULT NOW())`;
 
     pool.query(userCreateQuery)
         .then(res => {
@@ -35,7 +36,10 @@ const createTaskTable = () => {
         (id SERIAL PRIMARY KEY,
         userid INTEGER NOT NULL,
         location VARCHAR(100),
-        duration INTERVAL NOT NULL,
+        description TEXT NOT NULL,
+        event TIMESTAMP NOT NULL,
+        duration VARCHAR(100),
+        status BOOLEAN NOT NULL,
         created_at TIMESTAMP NOT NULL DEFAULT NOW(),
         updated_at TIMESTAMP NOT NULL DEFAULT NOW())`;
   
@@ -58,19 +62,19 @@ const createSubTaskTable = () => {
     const subTaskCreateQuery = `CREATE TABLE IF NOT EXISTS subtask
         (id SERIAL PRIMARY KEY,
         description TEXT NOT NULL,
-        duration INTERVAL NOT NULL,
+        duration VARCHAR(100) NOT NULL,
         created_at TIMESTAMP NOT NULL DEFAULT NOW(),
         updated_at TIMESTAMP NOT NULL DEFAULT NOW())`;
   
     pool.query(subTaskCreateQuery)
-    .then((res) => {
-        console.log(res);
-        pool.end();
-    })
-    .catch((err) => {
-        console.log(err);
-        pool.end();
-    })
+        .then((res) => {
+            console.log(res);
+            pool.end();
+        })
+        .catch((err) => {
+            console.log(err);
+            pool.end();
+        })
 }
 
 /**
@@ -86,14 +90,14 @@ const createTaskDetailTable = () => {
         updated_at TIMESTAMP NOT NULL DEFAULT NOW())`;
   
     pool.query(taskDetailCreateQuery)
-      .then((res) => {
-        console.log(res);
-        pool.end();
-      })
-      .catch((err) => {
-        console.log(err);
-        pool.end();
-      })
+        .then((res) => {
+            console.log(res);
+            pool.end();
+        })
+        .catch((err) => {
+            console.log(err);
+            pool.end();
+        })
 }
 
 /**
@@ -109,14 +113,14 @@ const createRepeatTaskTable = () => {
         updated_at TIMESTAMP NOT NULL DEFAULT NOW())`;
   
     pool.query(repeatTaskCreateQuery)
-      .then((res) => {
-        console.log(res);
-        pool.end();
-      })
-      .catch((err) => {
-        console.log(err);
-        pool.end();
-      })
+        .then((res) => {
+            console.log(res);
+            pool.end();
+        })
+        .catch((err) => {
+            console.log(err);
+            pool.end();
+        })
 }
 
 /**

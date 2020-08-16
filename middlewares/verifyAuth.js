@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
 const {errorMessage, status} =  require('../helpers/status')
-const env = require('../env')
+
 dotenv.config();
 
 /**
@@ -31,4 +31,4 @@ const verifyToken = async (req, res, next) => {
     }
 };
 
-module.expo = verifyToken
+module.exports = verifyToken

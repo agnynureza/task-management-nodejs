@@ -1,4 +1,3 @@
-const dbQuery = require('../../db/dev/dbQuery')
 const {errorMessage, successMessage, status} = require('../../helpers/status')
 const {comparePassword, generateUserToken, isEmpty} = require('../../helpers/validation')
 const User = require('./userClass')
