@@ -41,7 +41,7 @@ const generateUserToken = (id, username, password) => {
             username,
             password
         },
-        process.env.SECRET, { expiresIn: '3d' });
+        process.env.SECRET, { expiresIn: '1h' });
     return token;
 };
 

@@ -7,7 +7,7 @@ const UserModel = require('./userModel')
  * Create A User
  * @param {object} req
  * @param {object} res
- * @returns {object} reflection object
+ * @returns {object} user object
  */
 
 const signUpUser = async (req, res) => {

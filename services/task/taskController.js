@@ -2,6 +2,13 @@ const Task = require('./taskClass')
 const TaskModel = require('./taskModel')
 const {errorMessage, successMessage, status} = require('../../helpers/status') 
 
+/**
+ * Create A Task
+ * @param {object} req
+ * @param {object} res
+ * @returns {object} task object
+ */
+
 const createTask = async (req, res) => {
     let{location, description, event, duration, subtask} = req.body
     let {id} = req.user 
@@ -13,8 +20,8 @@ const createTask = async (req, res) => {
     }
     let taskParams = task.paramsTask
     let subTaskPrams = task.paramsSubtask
-    
-    try{
+
+    try{ 
         let dbResponse = await TaskModel.insertAll(taskParams, subTaskPrams)
        
         successMessage.data = dbResponse;
@@ -26,6 +33,26 @@ const createTask = async (req, res) => {
     }
 }
 
+const getTask= async (req, res) => {
+    let {time, location} = req.body
+    let {id} = req.user
+
+    let user = new Task ()
+    user.location = location
+    user.event = time
+
+    try{
+        let dbResponse = await TaskModel.listTask(id, user._location, user._event)
+        successMessage.data = dbResponse;
+        return res.status(status.success).send(successMessage);
+    }catch(error){
+        errorMessage.error = 'Operation was not successful';
+        errorMessage.result = error
+        return res.status(status.error).send(errorMessage);
+    }
+}
+
 module.exports = {
-    createTask
+    createTask,
+    getTask
 }
