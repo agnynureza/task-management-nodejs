@@ -53,6 +53,7 @@ const getTask= async (req, res) => {
 
     try{
         let dbResponse = await TaskModel.listTask(id, user._location, user._event)
+        console.log(dbResponse)
         successMessage.data = dbResponse;
         return res.status(status.success).send(successMessage);
     }catch(error){

@@ -9,7 +9,7 @@ class Task{
         this._userid = String(userid)
         this._description = description || ""
         this._location = location || ""
-        this._event = event || ""
+        this._event = event || null
         this._duration = duration || ""
         this._subtask = subtask || [] 
         this._repeat = repeat || ""
