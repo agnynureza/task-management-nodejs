@@ -131,6 +131,21 @@ class TaskModel {
             throw(err)
         }
     }
+
+    static async repeatTask(userid){
+        try{
+            let queryStatement = `SELECT t.location, t.description, t.event, tr.repeat_type, tr.repeat_value 
+                        FROM task AS t
+                        JOIN taskdetail AS td ON t.id = td.taskid
+                        JOIN taskrepeat AS tr ON td.id = tr.taskdetailid
+                        WHERE t.userid = $1; `
+            let values = [userid]
+            let {rows} = await dbQuery.query(queryStatement,values)
+            return rows
+        }catch(err){
+            throw(err)
+        }
+    } 
     
 }
 

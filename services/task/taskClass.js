@@ -108,11 +108,11 @@ class Task{
             let timeEvent = task[i]['time event']
             let repeat_value = task[i]['repeat_value']
 
-            if(repeat_event == 'every day' || repeat_event == 'every week'){
-                timeEvent = new Date.setDate((new Date(timeEvent).getDate() + repeat_value))  
-            }else if(repeat_event == 'every month'){
-                timeEvent = new Date.setMonth((new Date(timeEvent).getMonth() + repeat_value))  
-            }
+            // if(repeat_event == 'every day' || repeat_event == 'every week'){
+            //     timeEvent = new Date.setDate((new Date(timeEvent).getDate() + repeat_value))  
+            // }else if(repeat_event == 'every month'){
+            //     timeEvent = new Date.setMonth((new Date(timeEvent).getMonth() + repeat_value))  
+            // }
         
             if( moment(this._event).format("YYYY-MM-DD") == moment(timeEvent).format("YYYY-MM-DD")){
                 let currentPlan = replaceTime(task[i]['sub duration'])
@@ -130,6 +130,41 @@ class Task{
                 }
             }
         }
+    }
+
+    filterRepeatTask(task, time){
+        let filter = []
+        try{
+            let searchTime = moment(time, "YYYY-MM-DD")
+            for(let i = 0 ; i < task.length ; i++){
+                let diff;
+                let repeatTime = moment(task[i].event, "YYYY-MM-DD")
+                switch(task[i].repeat_type){
+                    case 'every day':
+                        diff = moment.duration(searchTime.diff(repeatTime)).asDays()
+                        break
+                    case 'every week':
+                        diff = moment.duration(searchTime.diff(repeatTime)).asDays()
+                        break
+                    case 'every month':
+                        diff = moment.duration(searchTime.diff(repeatTime)).asMonths()
+                        break
+                    case 'every year':
+                        diff = moment.duration(searchTime.diff(repeatTime)).asYears()
+                        break
+                    default:
+                        diff = 0 
+                        break
+                }
+                if (diff%task[i].repeat_value == 0){
+                    filter.push(task[i])
+                }
+            }
+            return filter
+        }catch(err){
+            throw (err)
+        }
+      
     }
     
 } 

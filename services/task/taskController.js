@@ -47,13 +47,17 @@ const getTask= async (req, res) => {
     let {time, location} = req.body
     let {id} = req.user
 
-    let user = new Task ()
-    user.location = location
-    user.event = time
+    let task = new Task ()
+    task.location = location
+    task.event = time
 
     try{
-        let dbResponse = await TaskModel.listTask(id, user._location, user._event)
-        console.log(dbResponse)
+        let dbResponse = await TaskModel.listTask(id, task._location, task._event)
+        let repeatResponse = await TaskModel.repeatTask(id)
+       
+        repeatResponse = task.filterRepeatTask(repeatResponse, task._event) 
+        dbResponse = [...dbResponse, ...repeatResponse]
+        
         successMessage.data = dbResponse;
         return res.status(status.success).send(successMessage);
     }catch(error){

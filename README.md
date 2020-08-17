@@ -120,7 +120,7 @@ Headers:
 
 Main Task and Sub Task
 
-![task](projectSchema)
+![task](images/addsubTask.png)
 
 Body:
 
@@ -148,7 +148,7 @@ Response :
 
 Token Expired (1H) need to login again get new token:
 
-![TokenExpired](images/tokenexpired.png )
+![TokenExpired](images/tokenexpired.png)
 
 
 
@@ -171,7 +171,7 @@ Response :
 ```
  we can extract data and fill , location , duration and time event (tomorrow <today + 1>)
 
- ![singleString](images/)
+ ![singleString](images/singleString.png)
 
 
 ### Api add task will give error if user already schedule that time (limited with fix task not repeated)
@@ -231,7 +231,7 @@ Headers:
 1. give list task and subtask too
 2. if user only have task will show main task 
 3. if user have subtask will show all subtask related
--
+
 Body :
 
 ```
@@ -277,12 +277,12 @@ Response:
 
 Remember when i insert repeated event 
 ```
-{
-    "location": "university",
-    "description": "Final Exam",
-    "event": "2020-08-20",
-    "duration":"3pm",
-    "repeat": "every day"
+ {
+    "location": "Home",
+    "description": "WFH",
+    "event": "2020-08-20T17:00:00.000Z",
+    "repeat_type": "every day",
+    "repeat_value": 1
 }
 ```
 
@@ -299,7 +299,16 @@ Body:
 Response:
 ```
 {
-    
+    "status": "success",
+    "data": [
+        {
+            "location": "Home",
+            "description": "WFH",
+            "event": "2020-08-20T17:00:00.000Z",
+            "repeat_type": "every day",
+            "repeat_value": 1
+        }
+    ]
 }
 ```
 
