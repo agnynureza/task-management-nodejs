@@ -109,6 +109,7 @@ const createRepeatTaskTable = () => {
         (id SERIAL PRIMARY KEY,
         taskdetailid INTEGER REFERENCES taskdetail(id) ON DELETE CASCADE,
         repeat_type VARCHAR(100),
+        repeat_value INTEGER,
         created_at TIMESTAMP NOT NULL DEFAULT NOW(),
         updated_at TIMESTAMP NOT NULL DEFAULT NOW())`;
   

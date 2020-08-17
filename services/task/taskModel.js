@@ -83,11 +83,13 @@ class TaskModel {
 
     static async getTask (userid, time){
         try {
-            let queryStatement = `SELECT t.userid, t.location, t.description as "main task",
-                  t.event as "time event", t.duration, t. status, tr.repeat_type
-                  from task AS t 
-                  join taskdetail AS td ON t.id = td.taskid
-                  left join taskrepeat AS tr ON td.id = tr.taskdetailid
+            let queryStatement = `SELECT t.userid, t.location, t.description AS "main task",
+                  t.event AS "time event", t.duration AS "main duration" , t. status, tr.repeat_type,
+                  tr.repeat_value, st.description AS "sub task", st.duration "sub duration"
+                  FROM task AS t 
+                  JOIN taskdetail AS td ON t.id = td.taskid
+                  JOIN subtask AS st ON st.id = td.subtaskid
+                  LEFT JOIN taskrepeat AS tr ON td.id = tr.taskdetailid
                 WHERE 
                   userid = $1 
                     AND 

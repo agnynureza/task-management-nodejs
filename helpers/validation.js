@@ -85,12 +85,23 @@ const isEmpty = (input) => {
 };
 
 
+/**
+ * replace string helper method 
+ * @param {string} input
+ * @returns {object, integer} 
+*/
   
+const replaceString = (input) => {
+    return input.replace(/\D+/g, "")
+}
+
+
 module.exports ={
     hashPassword,
     comparePassword,
     generateUserToken,
     isValidEmail,
     validatePassword,
-    isEmpty
+    isEmpty,
+    replaceString
 }

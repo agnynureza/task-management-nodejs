@@ -12,7 +12,7 @@ const {errorMessage, successMessage, status} = require('../../helpers/constant')
 const createTask = async (req, res) => {
     let{location, description, event, duration, subtask, repeat} = req.body
     let {id} = req.user 
-    let task = new Task(id, location, description, event, duration, subtask. repeat)
+    let task = new Task(id, location, description, event, duration, subtask, repeat)
 
     task.validateLocation()
     task.validateEvent()
@@ -28,11 +28,11 @@ const createTask = async (req, res) => {
     try{ 
         let getTask = await TaskModel.getTask(id, task._event)
         task.validationClashEvent(getTask)
-
-        let dbResponse = await TaskModel.insertAll(taskParams, subTaskPrams)
-       
         successMessage.data = dbResponse;
         return res.status(status.success).send(successMessage);
+        let dbResponse = await TaskModel.insertAll(taskParams, subTaskPrams)
+       
+        
     }catch(error){
         errorMessage.error = 'Operation was not successful';
         errorMessage.result = error
