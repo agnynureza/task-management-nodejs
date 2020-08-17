@@ -41,9 +41,7 @@ you can use postman or insomnia for API testing :
 1. GET ```/user/signup```
 
 
-![Image Of Signin]
-
-(images/signin.png)
+![Signin](images/signin.png)
 
 
 Headers: 
