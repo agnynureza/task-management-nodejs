@@ -39,9 +39,12 @@ Access API via ```http://localhost:3000```
 you can use postman or insomnia for API testing :
 
 1. GET ```/user/signup```
+
     
 ![Image Of Signin]
 (https://drive.google.com/file/d/10UWXTNZ2HhvnK2Z_ftvlCiLreKL_P6ly/view?usp=sharing)
+
+
 Headers: 
 ```Bambulife accid=5c2def59b72e1f1568182341```
 
