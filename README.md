@@ -40,9 +40,10 @@ you can use postman or insomnia for API testing :
 
 1. GET ```/user/signup```
 
-    
+
 ![Image Of Signin]
-(https://drive.google.com/file/d/10UWXTNZ2HhvnK2Z_ftvlCiLreKL_P6ly/view?usp=sharing)
+
+(images/signin.png)
 
 
 Headers: 
