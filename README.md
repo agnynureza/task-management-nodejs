@@ -38,56 +38,57 @@ Access API via ```http://localhost:3000```
 ### Basic usage:
 you can use postman or insomnia for API testing :
 
-1. GET ```/user/signup```
+1. POST ```/user/signup```
 
+![Signup](images/signup.png) 
 
-![Signin](images/signin.png)
+Body :
+| Key  | Value  | Data type |
+| ----- | --------- | ----- |
+| username | `agnynureza` | String |
+| password | `123456`  | String |
 
+Respon :
+```
+{
+    "status": "success",
+    "data": {
+        "id": 4,
+        "username": "agnynureza",
+        "created_at": "2020-08-17T17:00:00.000Z",
+        "updated_at": "2020-08-17T17:00:00.000Z",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJhZ255bnVyZXphIiwiaWF0IjoxNTk3NjkxOTQ1LCJleHAiOjE1OTc2OTU1NDV9.0mC2RvO71PubPwv35wGOwXKAVAduBJkgPq5nzYOG4U4"
+    }
+}
+```
 
-Headers: 
-```Bambulife accid=5c2def59b72e1f1568182341```
+2. POST ```/user/signin```
 
-| Key  | Value  | 
-| ----- | --------- |
-| token | ${data.token_from_sigin} |
-| accid | ${data.id_from_signin}  | 
+![Signin](images/signin.png) 
 
-Params:
+Body:
+ 
+| Key  | Value  | Data Type |
+| ---- | ------ |--------|
+| username | `agnynureza` | String|
+| password | `123456` | String |
 
-| Key | Value | info   |
-| ---- | ------ | ------- |
-| age| 20 | optional |
-| score| 0.8 | optional |
-| longitude | 43.23 | optional |
-| latitude | 34.432 | optional |
-| monthlyIncome| 4352 | optional |
-| experienced | true | optional |
+Respon : 
 
-2.POST ```/people-like-you```
+```
+{
+    "status": "success",
+    "data": {
+        "id": 4,
+        "username": "agnynureza",
+        "created_at": "2020-08-17T17:00:00.000Z",
+        "updated_at": "2020-08-17T17:00:00.000Z",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJhZ255bnVyZXphIiwiaWF0IjoxNTk3NjkyNDExLCJleHAiOjE1OTc2OTYwMTF9.iNlCqiaHcHAEBcnqvNinfpDDv2ferSta8QCQ2mhzt5I"
+    }
+}    
+```
 
-Headers:  
-
-```Bambulife accid=5c2def59b72e1f1568182341```
-
-| Key  | Value  |
-| ---- | ------ |
-| token | ${data.token_from_sigin} |
-| accid | ${data.id_from_signin}
-| Content-type | application/x-www-form-urlencoded |
-
-Body/payload: 
-
-| parameter  | type   |
-| ----------- | ------- |
-| name | String |
-| age |Integer |
-| longitude | String |
-| latitude | String |
-| monthlyIncome | Integer |
-| experienced | Boolean |
-| score | Integer |
-
-3.PUT ```/people-like-you/:id```
+3. POST ```/people-like-you/:id```
 where id = ${data._id_from_create people} 
 
 Headers:
