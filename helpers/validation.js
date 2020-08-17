@@ -91,10 +91,38 @@ const isEmpty = (input) => {
  * @returns {object, integer} 
 */
   
-const replaceString = (input) => {
-    return input.replace(/\D+/g, "")
+const replaceTime  = (input) => {
+    let split = input.split('-')
+    for(let i = 0 ; i < split.length ; i++){
+        if(split[i].toLowerCase().includes('pm')){
+            split[i] = split[i].toLowerCase().replace('pm', '')
+            split[i] = Number(split[i].trim()) + 12
+        } else {
+            split[i] = split[i].toLowerCase().replace('am', '')
+            split[i] = Number(split[i].trim())
+        }
+    }
+    return split
 }
 
+const repeatValue = (repeat)=>{
+    let value = 0
+    switch(repeat.toLowerCase()){
+        case 'every day':
+        case 'every year':
+        case 'every month':
+            value = 1
+            break
+        case 'every week':
+            value = 7 
+            break
+        default:
+            value = 0 
+            break
+    }
+
+    return value 
+}
 
 module.exports ={
     hashPassword,
@@ -103,5 +131,6 @@ module.exports ={
     isValidEmail,
     validatePassword,
     isEmpty,
-    replaceString
+    replaceTime,
+    repeatValue
 }

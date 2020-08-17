@@ -1,6 +1,7 @@
 const dbQuery = require('../../db/dev/dbQuery')
 const pool = require('../../db/dev/pool')
 const format = require('pg-format')
+const {repeatValue} = require('../../helpers/validation')
 
 
 class TaskModel {
@@ -33,26 +34,53 @@ class TaskModel {
             params.push([taskId, subTaskId[i].id, false])
         }
 
-        let queryStatement = format(`INSERT INTO TASKDETAIL(taskid, subtaskid, status) VALUES %L`, params)
+        let queryStatement = format(`INSERT INTO TASKDETAIL(taskid, subtaskid, status) VALUES %L RETURNING id`, params)
         try{
             let {rows} = await dbQuery.query(queryStatement)
-            return rows[0]
+            return rows
         }catch(err){
             throw(err)
         } 
     }
 
-    static async insertAll(paramstask, subTaskParams){
+    static async insertTaskRepeatEvent(taskDetailId, paramsTask){
+        let params = []
+        for(let i = 0 ; i < taskDetailId.length ; i++){
+                let repeat_value = repeatValue(paramsTask.repeat)
+                params.push([taskDetailId[i].id, paramsTask.repeat, repeat_value])
+        }
+        
+        let queryStatement = format(`INSERT INTO TASKREPEAT(taskdetailid, repeat_type , repeat_value) VALUES %L`, params)
+        try{
+            let {rows} = await dbQuery.query(queryStatement)
+            return rows
+        }catch(err){
+            throw(err)
+        } 
+    }
+
+    static async insertAll(paramsTask, subTaskParams){
         let subtask= [0]
         try{
             await pool.query('BEGIN')
-            let respTask = await this.insertTaskDB(paramstask)
 
+            //insert task
+            let respTask = await this.insertTaskDB(paramsTask)
+
+            //check have sub task 
             if(subTaskParams.length > 0){
                 let respSubTask = await this.insertSubTaskDB(subTaskParams)
                 subtask = respSubTask
             }
-            await this.insertRelationTaskDB(respTask.id, subtask)
+        
+            //insert to table relation
+            let repTaskDetail = await this.insertRelationTaskDB(respTask.id, subtask)
+            
+            //check have repeat event 
+            if(paramsTask.repeat !== "" ){
+                await this.insertTaskRepeatEvent(repTaskDetail, paramsTask)
+             }
+
             await pool.query('COMMIT')
             return `Suceess Insert task id : ${respTask.id} `
         }catch(error){

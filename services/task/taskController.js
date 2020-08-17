@@ -11,6 +11,7 @@ const {errorMessage, successMessage, status} = require('../../helpers/constant')
 
 const createTask = async (req, res) => {
     let{location, description, event, duration, subtask, repeat} = req.body
+
     let {id} = req.user 
     let task = new Task(id, location, description, event, duration, subtask, repeat)
 
@@ -22,17 +23,19 @@ const createTask = async (req, res) => {
         errorMessage.error = 'Description or Event are missing';
         return res.status(status.bad).send(errorMessage);
     }
+
+
     let taskParams = task.paramsTask
     let subTaskPrams = task.paramsSubtask
 
     try{ 
         let getTask = await TaskModel.getTask(id, task._event)
         task.validationClashEvent(getTask)
-        successMessage.data = dbResponse;
-        return res.status(status.success).send(successMessage);
+      
         let dbResponse = await TaskModel.insertAll(taskParams, subTaskPrams)
-       
-        
+
+        successMessage.data = dbResponse;
+        return res.status(status.success).send(successMessage);       
     }catch(error){
         errorMessage.error = 'Operation was not successful';
         errorMessage.result = error

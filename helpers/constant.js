@@ -16,7 +16,7 @@ const numbs = '[1-9]|am|pm'
 const days  = '((mon|tues|wed(nes)?|thur(s)?|fri|sat(ur)?|sun)(day)?)'
 const day = 'monday|tuesday|wednesday|thrusday|friday|saturday|sunday'
 const times = 'today|tomorrow|next week|next month'  
-const repeated = ''
+const repeated = 'every day|every week|every month'
 const daysNumb = {
   'sunday' : 7,
   'monday' : 1,
@@ -29,7 +29,7 @@ const daysNumb = {
 
 const locationFilter = `${conjuction}|${numbs}|${days}|${times}` 
 const timeFilter =`[1-9]?(am)|[1-9]?(pm)`
-const eventFilter = `${day}|${times}` 
+const eventFilter = `${day}|${times}|${repeated}` 
 
 module.exports =  {
   successMessage,

@@ -1,7 +1,7 @@
 const {isEmpty} = require('../../helpers/validation') 
 const {locationFilter, timeFilter, eventFilter, daysNumb} = require('../../helpers/constant')
 const moment = require('moment')
-const {replaceString} = require('../../helpers/validation')
+const {replaceTime} = require('../../helpers/validation')
 
 
 class Task{
@@ -29,7 +29,8 @@ class Task{
             location: this._location,
             description: this._description,
             event: this._event,
-            duration: this._duration
+            duration: this._duration,
+            repeat: this._repeat
         }
     }
 
@@ -64,7 +65,7 @@ class Task{
             let day = filter[0]
             
             let date = new Date()
-    
+
             switch(day.toLowerCase()){
                 case 'tomorrow':
                     day = new Date(date.setDate(date.getDate() + 1)).toDateString()
@@ -81,6 +82,7 @@ class Task{
                     day = new Date(date.setDate(date.getDate() + add)).toDateString()
                     break
             }
+            day == 'Invalid Date' ? day = moment(new Date ()).format("YYYY-MM-DD") : ''
             this._event = day
         }
     }
@@ -90,16 +92,18 @@ class Task{
             let rgx = new RegExp(timeFilter, "gi")
             let description = this._description
             let filter = description.match(rgx)
-    
+            
+            if(filter.length < 1){
+                throw "you must fill duration event"
+            }
+
             this._duration = filter[0]
         }
     }
 
     validationClashEvent(task){
-        // console.log(task)
-        // console.log(this._duration)
-        // console.log(this._event)
         for(let i = 0 ; i < task.length ; i++){
+            let today = new Date()
             let repeat_event = task[i]['repeat_type']
             let timeEvent = task[i]['time event']
             let repeat_value = task[i]['repeat_value']
@@ -110,10 +114,20 @@ class Task{
                 timeEvent = new Date.setMonth((new Date(timeEvent).getMonth() + repeat_value))  
             }
         
-            console.log(task[i])
-            console.log(this._duration)
             if( moment(this._event).format("YYYY-MM-DD") == moment(timeEvent).format("YYYY-MM-DD")){
-                console.log(replaceString(task[i]['sub duration']))
+                let currentPlan = replaceTime(task[i]['sub duration'])
+                let futurePlan = replaceTime(this._duration)
+                
+                //have duration
+                if(currentPlan.length > 1){
+                    if(futurePlan[0] >= currentPlan[0] && futurePlan[0] <= currentPlan[1]){
+                        throw `you already have schedule at that time : ${this._event} ${this._duration} `
+                    }
+                }else{
+                    if(currentPlan[0] == futurePlan[0]){
+                        throw `you already have schedule at that time : ${this._event} ${this._duration} `
+                    }
+                }
             }
         }
     }
