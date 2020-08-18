@@ -42,6 +42,7 @@ class Task{
         if(isEmpty(this._description) || isEmpty(this._userid) || isEmpty(this._event)){
             return true
         }
+        return false
     }
 
     validateLocation(){
@@ -63,9 +64,8 @@ class Task{
             let description = this._description
             let filter = description.match(rgx)
             let day = filter[0]
-            
+           
             let date = new Date()
-
             switch(day.toLowerCase()){
                 case 'tomorrow':
                     day = new Date(date.setDate(date.getDate() + 1)).toDateString()
@@ -82,7 +82,7 @@ class Task{
                     day = new Date(date.setDate(date.getDate() + add)).toDateString()
                     break
             }
-            day == 'Invalid Date' ? day = moment(new Date ()).format("YYYY-MM-DD") : ''
+            day == 'Invalid Date' ? day = moment(new Date ()).format("YYYY-MM-DD") : day = moment(day).format("YYYY-MM-DD") 
             this._event = day
         }
     }
@@ -103,16 +103,8 @@ class Task{
 
     validationClashEvent(task){
         for(let i = 0 ; i < task.length ; i++){
-            let today = new Date()
-            let repeat_event = task[i]['repeat_type']
             let timeEvent = task[i]['time event']
-            let repeat_value = task[i]['repeat_value']
-
-            // if(repeat_event == 'every day' || repeat_event == 'every week'){
-            //     timeEvent = new Date.setDate((new Date(timeEvent).getDate() + repeat_value))  
-            // }else if(repeat_event == 'every month'){
-            //     timeEvent = new Date.setMonth((new Date(timeEvent).getMonth() + repeat_value))  
-            // }
+       
         
             if( moment(this._event).format("YYYY-MM-DD") == moment(timeEvent).format("YYYY-MM-DD")){
                 let currentPlan = replaceTime(task[i]['sub duration'])
@@ -121,11 +113,11 @@ class Task{
                 //have duration
                 if(currentPlan.length > 1){
                     if(futurePlan[0] >= currentPlan[0] && futurePlan[0] <= currentPlan[1]){
-                        throw `you already have schedule at that time : ${this._event} ${this._duration} `
+                        throw `you already have schedule at that time : ${moment(this._event).format("YYYY-MM-DD")} ${this._duration}`
                     }
                 }else{
                     if(currentPlan[0] == futurePlan[0]){
-                        throw `you already have schedule at that time : ${this._event} ${this._duration} `
+                        throw `you already have schedule at that time : ${moment(this._event).format("YYYY-MM-DD")} ${this._duration}`
                     }
                 }
             }
@@ -136,6 +128,7 @@ class Task{
         let filter = []
         try{
             let searchTime = moment(time, "YYYY-MM-DD")
+
             for(let i = 0 ; i < task.length ; i++){
                 let diff;
                 let repeatTime = moment(task[i].event, "YYYY-MM-DD")

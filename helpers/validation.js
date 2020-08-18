@@ -86,9 +86,9 @@ const isEmpty = (input) => {
 
 
 /**
- * replace string helper method 
+ * replaceTime helper method 
  * @param {string} input
- * @returns {object, integer} 
+ * @returns {array} 
 */
   
 const replaceTime  = (input) => {
@@ -105,6 +105,12 @@ const replaceTime  = (input) => {
     return split
 }
 
+/**
+ * replace string helper method 
+ * @param {string} input
+ * @returns {object, integer} 
+*/
+  
 const repeatValue = (repeat)=>{
     let value = 0
     switch(repeat.toLowerCase()){

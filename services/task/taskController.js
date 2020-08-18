@@ -43,6 +43,13 @@ const createTask = async (req, res) => {
     }
 }
 
+/**
+ * Create A Task
+ * @param {object} req
+ * @param {object} res
+ * @returns {object} task object
+ */
+
 const getTask= async (req, res) => {
     let {time, location} = req.body
     let {id} = req.user
