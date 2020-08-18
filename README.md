@@ -8,7 +8,7 @@
 
 main bisnis i put in services grouping per modules
 
-![Project](images/projectSchemas.png)
+![Project](images/projectSchema.png)
 
 
 ### Features!
